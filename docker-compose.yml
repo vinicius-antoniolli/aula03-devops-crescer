@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: hello-dockerV3
+    # image: hellodocker:0.0.1
+    ports:
+      - "9320:8080"
