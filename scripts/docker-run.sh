@@ -1,1 +1,0 @@
-docker run -p 8090:8080 --name hello-docker -d hello-docker:latest
