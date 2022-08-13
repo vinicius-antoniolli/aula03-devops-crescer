@@ -22,7 +22,7 @@ services:
     environment:
       - mongodb.uri=mongodb://root:password@mongodb:27017
     ports:
-      - "9091:8080"
+      - "8080:8080"
     networks:
       - app
     depends_on:
