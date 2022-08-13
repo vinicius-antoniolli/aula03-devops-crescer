@@ -38,16 +38,7 @@ jobs:
       run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=lab-devops-project
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  sec-tests:
-    name: Análise de Segurança
-    needs: build
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes de segurança
-      run: echo Testes de segurança executados com sucesso      
-        
+ 
   tests:
     name: Testes automatizados
     needs: code-quality
@@ -63,44 +54,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Testes Unitários
-      run: mvn -B test --file pom.xml
-    
-  integration-tests:
-    name: Testes de Integração
-    needs: code-quality
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes integrados
-      run: echo Testes integrados executados com sucesso
-      
-  mutation-tests:
-    name: Testes de Mutação
-    needs: code-quality
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes de mutação
-      run: echo Testes de mutação executados com sucesso      
-
-  regression-tests:
-    name: Testes de Regressão
-    needs: code-quality
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes de regressão
-      run: echo Testes de regressão executados com sucesso      
-
-  functional-tests:
-    name: Testes Funcionais
-    needs: code-quality
-    runs-on: ubuntu-latest    
-    
-    steps:
-    - name: Simula execução de testes funcionais
-      run: echo Testes funcionais executados com sucesso         
-
+      run: mvn -B test --file pom.xml   
+       
   push-image:
     name: Enviar imagem Heroku
     needs: [code-quality, sec-tests, tests,  integration-tests, mutation-tests, regression-tests, functional-tests]
@@ -121,7 +76,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: registry.heroku.com/app-hello-docker-v2/web:latest
+        tags: registry.heroku.com/app-hello-docker-v3/web:latest
 
   deploy:
     name: Publica ambiente Desenvolvimento
@@ -136,7 +91,7 @@ jobs:
         username: ${{ secrets.HEROKU_EMAIL }}
         password: ${{ secrets.HEROKU_API_KEY }}
     - name: Publicação
-      run: heroku container:release -a app-hello-docker-v2 web
+      run: heroku container:release -a app-hello-docker-v3 web
       env:
         HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
